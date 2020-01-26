@@ -21,13 +21,9 @@ app.use((req, res, next) => {
   return next();
 });
 
-// Passport session setup.
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((obj, done) => done(null, obj));
-
-app.use(passport.initialize());
-// persist login sessions
-app.use(passport.session());
+// // Passport session setup.
+// passport.serializeUser((user, done) => done(null, user));
+// passport.deserializeUser((obj, done) => done(null, obj));
 
 // configure GitHub passport strategy
 passport.use(new Strategy({
@@ -44,7 +40,7 @@ passport.use(new Strategy({
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(methodOverride());
+// app.use(methodOverride());
 
 app.use(session({
   secret: 'hot modules in your area',
@@ -54,6 +50,10 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000,
   },
 }));
+// app.use(passport.initialize());
+// // persist login sessions
+app.use(passport.session());
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 // https://github.com/cfsghost/passport-github/blob/master/examples/login/app.js
 
@@ -61,7 +61,6 @@ app.get('/feed', (req, res) => {
   console.log('made it to OAuth');
 });
 
-app.use(express.static(path.resolve(__dirname, '../public')));
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 

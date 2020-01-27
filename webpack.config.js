@@ -25,11 +25,11 @@ module.exports = {
     filename: 'bundle.js',
   },
   devServer: {
-    contentBase: path.join(__dirname, 'public/index.html'),
+    // contentBase: path.join(__dirname, 'public/index.html'),
     publicPath: 'http://localhost:8080/dist/',
     proxy: {
       '/': 'http://localhost:3000',
-      '/feed': 'http://localhost:3000',
+      '/test': 'http://localhost:3000',
     },
     hotOnly: true,
   },

@@ -1,13 +1,14 @@
 {
   "name": "dot-catch",
   "version": "1.0.0",
-  "description": "Nerds finding love",
+  "description": "Your promises are unresolved. Let's fix that.",
   "main": "index.js",
   "dependencies": {
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "nodemon": "^2.0.2",
+    "pg": "^7.17.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-hot-loader": "^4.12.19"

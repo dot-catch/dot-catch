@@ -1,38 +1,37 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-  entry: "./client/index.js",
-  mode: "development",
+  entry: './client/index.js',
+  mode: 'development',
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env", "@babel/preset-react"] }
+        loader: 'babel-loader',
+        options: { presets: ['@babel/env', '@babel/preset-react'] },
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      }
-    ]
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
   },
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: { extensions: ['*', '.js', '.jsx'] },
   output: {
-    path: path.resolve(__dirname, "dist/"),
-    publicPath: "/dist/",
-    filename: "bundle.js"
+    path: path.resolve(__dirname, 'dist/'),
+    publicPath: '/dist/',
+    filename: 'bundle.js',
   },
   devServer: {
-    contentBase: path.join(__dirname, "public/"),
-    publicPath: "http://localhost:8080/dist/",
+    contentBase: path.join(__dirname, 'public/index.html'),
+    publicPath: 'http://localhost:8080/dist/',
     proxy: {
-      '/api': {
-          target: 'http://localhost:3000'
-      }
+      '/': 'http://localhost:3000',
+      '/feed': 'http://localhost:3000',
     },
-    hotOnly: true
+    hotOnly: true,
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()]
+  plugins: [new webpack.HotModuleReplacementPlugin()],
 };

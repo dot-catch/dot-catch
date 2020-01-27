@@ -47,13 +47,13 @@ app.get('/feed', (req, res) => {
     // extract access token from response
     const accessToken = response.data.access_token;
     // redirects user to the feed passing over the access token
-    res.redirect(`/test?access_token=${accessToken}`);
+    res.redirect(`http://localhost:8080/?access_token=${accessToken}`);
   });
 });
 
 // redirect route for /feed
 app.get('/test', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/feed.html'));
+  res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 
 app.use('/api', apiRouter);

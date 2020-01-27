@@ -24,9 +24,9 @@ app.use((req, res, next) => {
 });
 
 // render index.html on initial load
-// app.get('/', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, '../public/index.html'));
-// });
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../public/index.html'));
+});
 
 // OAuth client and secret credentials
 const clientID = '427c8387215135ef63b7';

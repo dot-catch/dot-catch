@@ -31,7 +31,7 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(res => {
-
+        console.log(res);
         const { login, avatar_url, followers, name, public_repos, repos_url, } = res;
 
         this.setState({
@@ -91,22 +91,33 @@ class App extends Component {
   }
 
   render(){
+    console.log(this.state.feed);
+    const feedArr = [];
+    for (let i = 0; i < this.state.feed.length; i+=1) {
+      feedArr.push(<FeedProfile userInfo={this.state.feed[i]} key={`userProfile-${i}`} />)
+    }
     return(
       <div>
-        <h1>.catch</h1>
+        <div id="header">
+          <h1>.catch</h1>
+          <p>Promises not resolved? Let us fix that.</p>
+        </div>
+        <div id="main">
         <div id="yourProfile">
           <div id="profilePhoto">
             <img src={`${this.state.avatar_url}`} ></img>
-          </div>
+          </div><h3>Your Profile</h3>
           <div id="profileInfo">
-            <h3>Your Profile</h3>
+            
             <p>Name: {this.state.name}</p>
             <p>GitHub Handle: {this.state.login}</p>
             <p>Followers: {this.state.followers}</p>
           </div>
         </div>
-        <div id="feed">
-          <FeedProfile />
+          <h3>Hot Modules In Your Area</h3>
+          <div id="feed">
+            {feedArr}
+          </div>
         </div>
       </div>
     )

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+const apiRouter = require('../routers/apiRouter.js');
 
 const app = express();
 const port = 3000;
@@ -53,6 +54,13 @@ app.get('/feed', (req, res) => {
 // redirect route for /feed
 app.get('/test', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
+});
+
+app.use('/api', apiRouter);
+
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(404).send('Abort! Error!')
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -20,6 +20,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // both constants used to grab GitHub access token from search window in browser
     const query = window.location.search.substring(1)
     const token = query.split('access_token=')[1]
 
@@ -30,8 +31,8 @@ class App extends Component {
       }
     })
       .then(res => res.json())
+      // adds the currently logged in user to state
       .then(res => {
-        console.log(res);
         const { login, avatar_url, followers, name, public_repos, repos_url, } = res;
 
         this.setState({
@@ -44,6 +45,7 @@ class App extends Component {
           repos_url,
         })
       })
+      // sends user info to server
       .then(() => {
         const userData = {
           login: this.state.login,
@@ -67,6 +69,7 @@ class App extends Component {
           })
           .catch(err => console.log('addUser POST error: ', err))
       })
+      // gets all profiles but the current user, and adds them to state
       .then(() => {
         const currentUser = {
           login: this.state.login,
@@ -91,11 +94,12 @@ class App extends Component {
   }
 
   render(){
-    console.log(this.state.feed);
+    // loops through profiles and adds them as components to an array
     const feedArr = [];
     for (let i = 0; i < this.state.feed.length; i+=1) {
       feedArr.push(<FeedProfile userInfo={this.state.feed[i]} key={`userProfile-${i}`} />)
     }
+
     return(
       <div>
         <div id="header">

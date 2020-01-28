@@ -5,14 +5,10 @@ import "./style.css";
 import {hot} from "react-hot-loader";
 
 class Login extends Component{
-
-
   render(){
     return(
+      // div to render login page
       <div>
-        <div>
-          <img src="../assets/Logo.jpg"/>
-        </div>
         <div className="Login">
           <h1> .catch </h1>
             <button id="signIn">

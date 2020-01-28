@@ -51,9 +51,9 @@ app.get('/feed', (req, res) => {
   });
 });
 
-app.use('/api', apiRouter);
+app.use('/api', apiRouter);  
 
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res, next) { //Basic error handler, doesn't really properly handle errors from middleware at this time. TODO.
   console.error(err.stack)
   res.status(404).send('Abort! Error!')
 });

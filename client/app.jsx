@@ -20,6 +20,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // both constants used to grab GitHub access token from search window in browser
     const query = window.location.search.substring(1)
     const token = query.split('access_token=')[1]
 
@@ -30,8 +31,8 @@ class App extends Component {
       }
     })
       .then(res => res.json())
+      // adds the currently logged in user to state
       .then(res => {
-
         const { login, avatar_url, followers, name, public_repos, repos_url, } = res;
 
         this.setState({
@@ -44,6 +45,7 @@ class App extends Component {
           repos_url,
         })
       })
+      // sends user info to server
       .then(() => {
         const userData = {
           login: this.state.login,
@@ -67,6 +69,7 @@ class App extends Component {
           })
           .catch(err => console.log('addUser POST error: ', err))
       })
+      // gets all profiles but the current user, and adds them to state
       .then(() => {
         const currentUser = {
           login: this.state.login,
@@ -91,22 +94,34 @@ class App extends Component {
   }
 
   render(){
+    // loops through profiles and adds them as components to an array
+    const feedArr = [];
+    for (let i = 0; i < this.state.feed.length; i+=1) {
+      feedArr.push(<FeedProfile userInfo={this.state.feed[i]} key={`userProfile-${i}`} />)
+    }
+
     return(
       <div>
-        <h1>.catch</h1>
+        <div id="header">
+          <h1>.catch</h1>
+          <p>Promises not resolved? Let us fix that.</p>
+        </div>
+        <div id="main">
         <div id="yourProfile">
           <div id="profilePhoto">
             <img src={`${this.state.avatar_url}`} ></img>
-          </div>
+          </div><h3>Your Profile</h3>
           <div id="profileInfo">
-            <h3>Your Profile</h3>
+            
             <p>Name: {this.state.name}</p>
             <p>GitHub Handle: {this.state.login}</p>
             <p>Followers: {this.state.followers}</p>
           </div>
         </div>
-        <div id="feed">
-          <FeedProfile />
+          <h3>Hot Modules In Your Area</h3>
+          <div id="feed">
+            {feedArr}
+          </div>
         </div>
       </div>
     )

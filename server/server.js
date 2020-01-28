@@ -51,11 +51,6 @@ app.get('/feed', (req, res) => {
   });
 });
 
-// redirect route for /feed
-app.get('/test', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/index.html'));
-});
-
 app.use('/api', apiRouter);
 
 app.use(function (err, req, res, next) {

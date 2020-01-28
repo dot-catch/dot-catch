@@ -3,7 +3,6 @@ const db = require ('../models/model.js');
 const profileController = {};
 
 profileController.addProfile = (req, res, next) => {
-    console.log('add controller');
     const login = [req.body.login];
     // console.log(login);
     const checkQuery = {
@@ -46,7 +45,6 @@ profileController.addProfile = (req, res, next) => {
 },
 
 profileController.getAllProfiles = (req, res, next) => {
-    console.log('Get All Controller');
     const text = 'SELECT * FROM profiles WHERE login<>$1';
     const values =[req.body.login];
     const query = {

@@ -5,8 +5,6 @@ import {hot} from "react-hot-loader";
 
 const FeedProfile = (props) => {
 
-  
-
   return (
     <div className="feedProfile">
       <div className="profilePhoto">

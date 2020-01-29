@@ -17,8 +17,19 @@ class App extends Component {
       repos_url: '',
       feed: [],
     }
+    this.getAll = this.getAll.bind(this)
   }
-
+  getAll() {
+    fetch('/info')
+      .then(res => res.json())
+      .then(data => {
+      this.setState({feed : data.allProfiles})
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      
+  }
   componentDidMount() {
     console.log('app mounted');
     // both constants used to grab GitHub access token from search window in browser
@@ -27,82 +38,24 @@ class App extends Component {
     fetch('/info')
       .then(res => res.json())
       .then(data => {
-        console.log(data);
+        console.log('data!', data);
         if (data.msg === 'invalid session') {
           window.location.pathname = '/loginPage'
         }
+        const { login, avatar_url, followers, name, public_repos, repos_url, } = data.userGithubProfile;
+        this.setState({
+          login,
+          avatar_url,
+          followers,
+          name,
+          public_repos,
+          repos_url,
+      })
       })
       .catch((err) => {
         console.log(err);
       })
       
-    // using parsed access_token to fetch user data
-    // fetch('https://api.github.com/user', {
-    //   headers: {
-    //     Authorization: 'token ' + token,
-    //   }
-    // })
-    //   .then(res => res.json())
-    //   // adds the currently logged in user to state
-    //   .then(res => {
-    //     const { login, avatar_url, followers, name, public_repos, repos_url, } = res;
-
-    //     this.setState({
-    //       login,
-    //       user_id: res.id,
-    //       avatar_url,
-    //       followers,
-    //       name,
-    //       public_repos,
-    //       repos_url,
-    //     })
-    //   })
-    //   // sends user info to server
-    //   .then(() => {
-    //     const userData = {
-    //       login: this.state.login,
-    //       avatar_url: this.state.avatar_url,
-    //       followers: this.state.followers,
-    //       name: this.state.name,
-    //       public_repos: this.state.public_repos,
-    //       repos_url: this.state.repos_url, 
-    //       user_id: this.state.user_id
-    //     }
-    //     fetch('/api/addUser', {
-    //       method: 'POST',
-    //       headers: {
-    //         "Content-Type": "application/json" 
-    //       },
-    //       body: JSON.stringify(userData),
-    //     })
-    //       .then(res => res.json())
-    //       .then(data => {
-    //         console.log('created new user: ', data)
-    //       })
-    //       .catch(err => console.log('addUser POST error: ', err))
-    //   })
-    //   // gets all profiles but the current user, and adds them to state
-    //   .then(() => {
-    //     const currentUser = {
-    //       login: this.state.login,
-    //       name: this.state.name,
-    //       user_id: this.state.user_id,
-    //     }
-    //     fetch('/api/getAll', {
-    //       method: 'POST',
-    //       headers: {
-    //         "Content-Type": "application/json" 
-    //       },
-    //       body: JSON.stringify(currentUser),
-    //     })
-    //       .then(res => res.json())
-    //       .then(data => {
-    //         return this.setState({
-    //           feed: data,
-    //         })
-    //       })
-    //       .catch(err => console.log('addUser POST error: ', err))
-    //   })
   }
 
   render(){
@@ -118,23 +71,32 @@ class App extends Component {
           <h1>.catch</h1>
           <p>Promises not resolved? Let us fix that.</p>
         </div>
-        <div id="main">
-        <div id="yourProfile">
-          <div id="profilePhoto">
-            <img src={`${this.state.avatar_url}`} ></img>
-          </div><h3>Your Profile</h3>
-          <div id="profileInfo">
-            
-            <p>Name: {this.state.name}</p>
+        {/* div for current user's profile picture */}
+        <div id="profileDiv">
+        <img src={`${this.state.avatar_url}`}  id="pic"></img>
+        </div>
+
+        {/* div for current user's information */}
+        <div id="profileInfo">
+            <div>
+            <p>{this.state.name}</p>
             <p>GitHub Handle: {this.state.login}</p>
             <p>Followers: {this.state.followers}</p>
-          </div>
+            
+            {/* div for the buttons */}
+            </div>
+            <div id='buttonDiv'>
+            <button onClick={() =>{
+             this.getAll()
+            }}>Get All</button>
+            <button>Filter</button>
+            </div>
         </div>
-          <h3>Hot Modules In Your Area</h3>
+            <hr></hr>
           <div id="feed">
             {feedArr}
           </div>
-        </div>
+        
       </div>
     )
   }

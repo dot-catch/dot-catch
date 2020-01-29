@@ -8,12 +8,14 @@
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
+    "jest": "^25.1.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2",
     "pg": "^7.17.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-hot-loader": "^4.12.19"
+    "react-hot-loader": "^4.12.19",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
@@ -30,7 +32,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev": "webpack-dev-server & nodemon server/server.js"
+    "dev": "webpack-dev-server & nodemon server/start.js"
   },
   "repository": {
     "type": "git",

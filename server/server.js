@@ -8,11 +8,10 @@ const profileController = require('../controllers/profileController.js')
 
 const app = express();
 const port = 3000;
-
+//body Parser used to parse all requests specified to have a JSON body in their header
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-let authToken;
 
 // app.use('/dist', express.static(path.resolve(__dirname, 'dist/')));
 

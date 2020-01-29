@@ -1,9 +1,9 @@
-/* 
+/*
 
 Back-end testing file
 
 Endpoints to test: expected response
-==> should also test failures 
+==> should also test failures
 
 Unit Tests:
 '/': index.html, status code 200(?), content type html
@@ -38,7 +38,7 @@ Database Create Table Script:
 const supertest = require('supertest');
 
 // app must not be listening in server.js file for tests to run
-const app = require('./server/server');
+const app = require('../server/server');
 
 const request = supertest(app);
 
@@ -60,7 +60,6 @@ describe('Route integration', () => {
 
 describe('Sample Test', () => {
   it('should test that true === true', () => {
-    expect(true).toBe(true)
-  })
-})
-
+    expect(true).toBe(true);
+  });
+});

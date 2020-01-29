@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const fetch = require('node-fetch');
+const cookieParser = require('cookie-parser');
 const apiRouter = require('../routers/apiRouter.js');
 const profileController = require('../controllers/profileController.js')
 
@@ -11,6 +12,7 @@ const port = 3000;
 //body Parser used to parse all requests specified to have a JSON body in their header
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 
 // app.use('/dist', express.static(path.resolve(__dirname, 'dist/')));
@@ -49,14 +51,11 @@ app.get('/info', (req, res, next) => {
   
   /****************/
   // check if session is valid (by checking cookie)
-  // res.send({ msg: 'invalid session' });
-
-  // if session is not valid, redirect to loginPage
-  // fetch user data from Github
-  // fetch from server API for remaining profiles
-  fetch('https://api.github.com/user', {
+  console.log('COOKIES: ', req.cookies);
+  if (req.cookies.authToken !== undefined) {
+    fetch('https://api.github.com/user', {
       headers: {
-        Authorization: 'token ' + authToken,
+        Authorization: 'token ' + req.cookies.authToken,
       }
     })
     .then(response => response.json())
@@ -66,7 +65,16 @@ app.get('/info', (req, res, next) => {
       console.log('initial fetch in /info');
       res.locals.userGithubProfile = data;
       next()
-    })
+    })    
+  } else {
+    // change front-end to check against response.err
+    res.send({ msg: 'invalid session' });
+  }
+  // res.send({ msg: 'invalid session' });
+
+  // if session is not valid, redirect to loginPage
+  // fetch user data from Github
+  // fetch from server API for remaining profiles
   // return response with user data and feed data
 }, profileController.addProfile, profileController.getAllProfiles, (req, res) => {
   console.log('final anonymous middleware callback');
@@ -93,7 +101,7 @@ app.get('/feed', (req, res) => {
     // res.redirect(`http://localhost:8080/?access_token=${accessToken}`);
 
     // Response is sent with a cookie (value of true to represent non-expired session) and redirect to /homePage
-    res.cookie('isLoggedIn', 'true', { maxAge: 5000 }).redirect('http://localhost:8080/');
+    res.cookie('authToken', authToken, { maxAge: 5000 }).redirect('http://localhost:8080/');
   });
 });
 

@@ -22,7 +22,7 @@ profileController.addProfile = (req, res, next) => { // Tried to set up single q
       const fields = ['login', 'user_id', 'avatar_url', 'followers', 'name', 'public_repos', 'repos_url'];
       const values = [];
       for (let i = 0; i < fields.length; i += 1) { // These checks not really necessary at this time, since data is coming from github, not user input.  If user input allowed, will probably be needed.
-        if (res.locals.userGithubProfile[fields[i]]) { // Iterates through all DB fields (hardcoded into array), checks if present in res.locals.userGithubProfile
+        if (res.locals.userGithubProfile[fields[i]] !== undefined) { // Iterates through all DB fields (hardcoded into array), checks if present in res.locals.userGithubProfile
           values.push(res.locals.userGithubProfile[fields[i]]);
         } else values.push('');
       }

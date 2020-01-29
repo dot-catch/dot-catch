@@ -34,6 +34,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
 
+app.get('/supertest', (req, res) => {
+  console.log('FROM /SUPERTEST: ', req.body);
+  res.status(201).send({ lolpost: 'hello world' });
+});
+
 // OAuth client and secret credentials
 const clientID = '427c8387215135ef63b7';
 const clientSecret = '7b79f3ecbbf15addbad9005104242aa42c9ac5e4';
@@ -80,7 +85,7 @@ app.get('/info', (req, res, next) => {
 }, profileController.addProfile, profileController.getAllProfiles, (req, res) => {
   console.log('final anonymous middleware callback');
   const { allProfiles, userGithubProfile } = res.locals;
-  res.status(200).send({ allProfiles, userGithubProfile });
+  res.status(201).send({ allProfiles, userGithubProfile });
 })
 
 // handles redirect from GitHub
@@ -113,4 +118,8 @@ app.use(function (err, req, res, next) { //Basic error handler, doesn't really p
   res.status(404).send('Abort! Error!')
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+// App must not be listening here must be commented out for supertest file to run
+// For production or development, import this into another file (e.g. start.js) and listen there
+// app.listen(port, () => console.log(`Listening on port ${port}`));
+
+module.exports = app;

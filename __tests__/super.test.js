@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
 Back-end testing file
 
@@ -41,58 +42,67 @@ Database Create Table Scripts:
 // See https://jestjs.io/docs/en/asynchronous
 
 const supertest = require('supertest');
+
+// Jest uses this under the hood
 const babelPolyfill = require('babel-polyfill');
 
-// app must not be listening in server.js file so tests can run
+// App must not be listening in server.js file so that tests can run
 const app = require('../server/server');
-const db = require('../models/model');
+
+// Create a new pool for this file so we can close it in afterAll()
+const { Pool } = require("pg");
+const PG_URI = "postgres://ycchvajh:YEQQEbpeqAzBfwrZ-vTy2lKQqTEu6ZDV@rajje.db.elephantsql.com:5432/ycchvajh";
+const pool = new Pool({
+  connectionString: PG_URI
+});
 
 const request = supertest(app);
 
+// To eventually be used for OAuth testing
 const clientID = '427c8387215135ef63b7';
 const clientSecret = '7b79f3ecbbf15addbad9005104242aa42c9ac5e4';
-let authToken; // should authToken be stored here? or in a beforeAll and cleared on afterAll?
+let authToken;
 
 
-// beforeAll((done) => {
-//
-// });
+beforeAll((done) => {
+  done();
+});
 
-// afterAll(async () => {
-//
-// });
+afterAll((done) => {
+  pool.end();
+  done();
+});
 
 describe('Route integration', () => {
   describe('/', () => {
     describe('GET', () => {
       // --------- TEST ROUTE
-      it('responds with 200 status and text/html content type', async (done) => {
+      it('responds with 201 status and application/json content type', async (done) => {
         const response = await request.get('/supertest');
         expect(response.status).toBe(201);
         expect(response.body.msg).toBe('hello test');
-        // expect(response).toBe('Content-Type', /application\/json/);
+        expect(response.header['content-type']).toBe('application/json; charset=utf-8');
         done();
       });
 
-      it('responds with 200 status and text/html content type when requesting the main feed', (done) => {
+      it('responds with 200 status and text/html content type when requesting the main feed', async (done) => {
+        const response = await request.get('/');
+        expect(response.status).toBe(200);
+        expect(response.header['content-type']).toBe('text/html; charset=UTF-8');
         done();
-        // return request
-        //   .get('/')
-        //   .expect('Content-Type', /text\/html/)
-        //   .expect(200);
       });
 
-      it('responds with 200 status and text/html content type when requesting the login page', (done) => {
+      it('responds with 200 status and text/html content type when requesting the login page', async (done) => {
+        const response = await request.get('/loginPage');
+        expect(response.status).toBe(200);
+        expect(response.header['content-type']).toBe('text/html; charset=UTF-8');
         done();
-        // return request
-        //   .get('/loginPage')
-        //   .expect('Content-Type', /text\/html/)
-        //   .expect(200);
       });
     });
   });
 });
 
+// This section is not complete
 describe('authController', () => {
   describe('setToken', () => {
     it('should store an access token if given a valid request token', (done) => {
@@ -114,17 +124,52 @@ describe('authController', () => {
 
     it('should respond with an error if given an invalid access token', (done) => {
       expect(true).toBe(true);
-      done()
+      done();
     });
   });
 });
 
-describe('profileController', () => {
-  // beforeAll
-  beforeAll(() => {
-    console.log('beforeAll ran');
-    // Add a profile
-    const createTestUserSQL = `
+describe('SQL Script Testing', () => {
+  
+  describe('adding a profile', () => {
+    beforeAll((done) => {
+      console.log('beforeAll ran');
+      // Add a profile
+      const createTestUserSQL = `
+        INSERT INTO _profiles_testing (
+          login,
+          user_id,
+          avatar_url,
+          followers,
+          name,
+          public_repos,
+          repos_url
+        ) VALUES (
+          'testuser',
+          123,
+          'fakeimage.png',
+          50,
+          'Test User',
+          10,
+          'reposURL'
+        )
+      `;
+      pool.query(createTestUserSQL, [], (err, res) => {
+        done();
+      });
+    });
+  
+    afterAll((done) => {
+      console.log('afterAll RAN');
+      // Delete the profile added in beforeAll
+      const deleteTestUserSQL = `DELETE FROM _profiles_testing`;
+      pool.query(deleteTestUserSQL, [], (err, res) => {
+        done();
+      });
+    });
+
+    it('should add a user to the database if they do not exist', (done) => {
+      const newUserSQL = `
       INSERT INTO _profiles_testing (
         login,
         user_id,
@@ -134,47 +179,49 @@ describe('profileController', () => {
         public_repos,
         repos_url
       ) VALUES (
-        'testuser',
+        'secondtestuser',
         123,
         'fakeimage.png',
         50,
-        'Abaas Khorrami',
+        'Test User',
         10,
         'reposURL'
       )
-    `;
-    // db
-    //   .query(createTestUserSQL, [])
-    //   .catch((err) => console.log(err));
-  });
+      `;
 
-  // afterAll
-  afterAll(() => {
-    console.log('afterAll RAN');
-    // Delete the profile added in beforeAll
-    const deleteTestUserSQL = `
-      DELETE FROM _profiles_testing
-      WHERE login='testuser'
-    `;
-    // db
-    //   .query(deleteTestUserSQL, [])
-    //   .catch((err) => console.log(err));
-  });
-
-  describe('adding a profile', () => {
-    it('should test that true === true', (done) => {
-      expect(true).toBe(true);
-      done();
+      pool.query(newUserSQL, [], (err, res) => {
+        const confirmSQL = `
+          SELECT * FROM _profiles_testing WHERE login='secondtestuser'
+        `;
+        pool.query(confirmSQL, [], (err, res) => {
+          expect(res.rows.length).toEqual(1);
+          done();
+        });
+      });
     });
-    // it should add a profile to the database when given a new user
-    // add a new profile
 
-    // it should not add a profile to the database when given an existing user
-    // add the same profile in the beforeAll
+    it('should confirm that a user already exists', (done) => {
+      const checkUserSQL = `
+        SELECT * FROM _profiles_testing
+        WHERE login='testuser'
+      `;
+      pool.query(checkUserSQL, [], (err, res) => {
+        expect(res.rows.length).toEqual(1);
+        done();
+      });
+    });
   });
 
   describe('getting all profiles', () => {
     // it should return all profiles except the current user's
+    it('should return all profiles except the user\'s profile', (done) => {
+      const getAllUsersSQL = "SELECT * FROM profiles WHERE login<>'testuser'";
+      pool.query(getAllUsersSQL, [], (err, res) => {
+        const loginsOnly = res.rows.map((rec) => rec.login);
+        expect(loginsOnly).not.toContain('testuser');
+        done();
+      });
+    })
   });
 });
 
@@ -185,26 +232,3 @@ describe('Sample Test', () => {
     done();
   });
 });
-
-
-// const createTestUserSQL = `
-//   INSERT INTO _profiles_testing (
-//     login,
-//     user_id,
-//     avatar_url,
-//     followers,
-//     name,
-//     public_repos,
-//     repos_url
-//   ) VALUES (
-//     'testuser',
-//     123,
-//     'fakeimage.png',
-//     50,
-//     'Abaas Khorrami',
-//     10,
-//     'reposURL'
-//   )
-// `;
-
-// db.query(createTestUserSQL, [], (err, res) => console.log(res.rows));

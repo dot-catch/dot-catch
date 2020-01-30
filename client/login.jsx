@@ -8,7 +8,7 @@ class Login extends Component {
   render() {
     return (
       // div to render login page
-      <div>
+      <div id="loginDiv">
         <div className="Login">
           <h1> .catch </h1>
           <button id="signIn">

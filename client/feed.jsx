@@ -1,6 +1,5 @@
 /* eslint-disable */ 
 import React, { Component} from "react";
-import "./style.css";
 import {hot} from "react-hot-loader";
 
 const FeedProfile = (props) => {

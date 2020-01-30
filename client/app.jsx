@@ -1,6 +1,6 @@
 /* eslint-disable */ 
 import React, { Component} from "react";
-import "./style.css";
+//test
 import {hot} from "react-hot-loader";
 import FeedProfile from "./feed.jsx";
 
@@ -15,7 +15,7 @@ class App extends Component {
       name: '',
       public_repos: 0,
       repos_url: '',
-      feed: [],
+      feed: [''],
     }
     this.getAll = this.getAll.bind(this)
   }

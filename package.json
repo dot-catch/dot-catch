@@ -1,6 +1,6 @@
 {
   "name": "dot-catch",
-  "version": "1.0.0",
+  "version": "1.0",
   "description": "Your promises are unresolved. Let's fix that.",
   "main": "index.js",
   "dependencies": {

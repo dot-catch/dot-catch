@@ -125,7 +125,7 @@ describe('authController', () => {
   });
 });
 
-describe('profileController', () => {
+describe('SQL Script Testing:', () => {
   
   describe('adding a profile', () => {
     // beforeAll
@@ -160,37 +160,68 @@ describe('profileController', () => {
     afterAll((done) => {
       console.log('afterAll RAN');
       // Delete the profile added in beforeAll
-      const deleteTestUserSQL = `
-        DELETE FROM _profiles_testing
-        WHERE login='testuser'
-      `;
+      const deleteTestUserSQL = `DELETE FROM _profiles_testing`;
       pool.query(deleteTestUserSQL, [], (err, res) => {
         done();
       });
     });
-    it('should test that true === true', (done) => {
-      expect(true).toBe(true);
-      done();
-    });
+
     // it should add a profile to the database when given a new user
-    // add a new profile
+    it('should add a user to the database if they do not exist', (done) => {
+      const newUserSQL = `
+      INSERT INTO _profiles_testing (
+        login,
+        user_id,
+        avatar_url,
+        followers,
+        name,
+        public_repos,
+        repos_url
+      ) VALUES (
+        'secondtestuser',
+        123,
+        'fakeimage.png',
+        50,
+        'Test User',
+        10,
+        'reposURL'
+      )
+      `;
+
+      pool.query(newUserSQL, [], (err, res) => {
+        const confirmSQL = `
+          SELECT * FROM _profiles_testing WHERE login='secondtestuser'
+        `;
+        pool.query(confirmSQL, [], (err, res) => {
+          expect(res.rows.length).toEqual(1);
+          done();
+        });
+      });
+    });
 
     // it should not add a profile to the database when given an existing user
-    it('should confirm that testuser already exists', (done) => {
+    it('should confirm that a user already exists', (done) => {
       const checkUserSQL = `
         SELECT * FROM _profiles_testing
         WHERE login='testuser'
       `;
-      done();
-      // db.query(checkUserSQL, [], (err, res) => {
-      //   // expect(res.rows.length).
-      // })
+      pool.query(checkUserSQL, [], (err, res) => {
+        expect(res.rows.length).toEqual(1);
+        done();
+      });
     });
-    // add the same profile in the beforeAll
   });
 
   describe('getting all profiles', () => {
     // it should return all profiles except the current user's
+    it('should return all profiles except the user\'s profile', (done) => {
+      const getAllUsersSQL = "SELECT * FROM profiles WHERE login<>'testuser'";
+      pool.query(getAllUsersSQL, [], (err, res) => {
+        const loginsOnly = res.rows.map((rec) => rec.login);
+        expect(loginsOnly).not.toContain('testuser');
+        done();
+      });
+    })
   });
 });
 

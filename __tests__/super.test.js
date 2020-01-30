@@ -36,52 +36,54 @@ Database Create Table Scripts:
     "id" SERIAL NOT NULL,
     "token" varchar NOT NULL
   );
-
 */
 
 // See https://jestjs.io/docs/en/asynchronous
 
 const supertest = require('supertest');
+const babelPolyfill = require('babel-polyfill');
 
 // app must not be listening in server.js file so tests can run
 const app = require('../server/server');
 const db = require('../models/model');
 
 const request = supertest(app);
-console.log(request.get('/supertest'));
-// request.get('/supertest').then(data => console.log(data)).catch(err => console.log(err));
 
 const clientID = '427c8387215135ef63b7';
 const clientSecret = '7b79f3ecbbf15addbad9005104242aa42c9ac5e4';
 let authToken; // should authToken be stored here? or in a beforeAll and cleared on afterAll?
 
+
+// beforeAll((done) => {
+//
+// });
+
+// afterAll(async () => {
+//
+// });
+
 describe('Route integration', () => {
   describe('/', () => {
     describe('GET', () => {
-
       // --------- TEST ROUTE
       it('responds with 200 status and text/html content type', async (done) => {
-        return request.get('/supertest')
-          .expect('Content-Type', /application\/json/)
-          .expect(200);
-
-
-        // const response = await request.get('/supertest');
-
-        // expect(response.header).toBe('Content-Type', /application\/json/);
-        // expect(response.status).toBe(201);
-
-        // done();
+        const response = await request.get('/supertest');
+        expect(response.status).toBe(201);
+        expect(response.body.msg).toBe('hello test');
+        // expect(response).toBe('Content-Type', /application\/json/);
+        done();
       });
 
-      it('responds with 200 status and text/html content type when requesting the main feed', () => {
+      it('responds with 200 status and text/html content type when requesting the main feed', (done) => {
+        done();
         // return request
         //   .get('/')
         //   .expect('Content-Type', /text\/html/)
         //   .expect(200);
       });
 
-      it('responds with 200 status and text/html content type when requesting the login page', () => {
+      it('responds with 200 status and text/html content type when requesting the login page', (done) => {
+        done();
         // return request
         //   .get('/loginPage')
         //   .expect('Content-Type', /text\/html/)
@@ -93,22 +95,26 @@ describe('Route integration', () => {
 
 describe('authController', () => {
   describe('setToken', () => {
-    it('should store an access token if given a valid request token', () => {
+    it('should store an access token if given a valid request token', (done) => {
       expect(true).toBe(true);
+      done();
     });
 
-    it('should respond with an error if given an invalid request token', () => {
+    it('should respond with an error if given an invalid request token', (done) => {
       expect(true).toBe(true);
+      done();
     });
   });
 
   describe('checkCookie', () => {
-    it('should fetch for user github data if given a valid access token', () => {
+    it('should fetch for user github data if given a valid access token', (done) => {
       expect(true).toBe(true);
+      done();
     });
 
-    it('should respond with an error if given an invalid access token', () => {
+    it('should respond with an error if given an invalid access token', (done) => {
       expect(true).toBe(true);
+      done()
     });
   });
 });
@@ -156,8 +162,9 @@ describe('profileController', () => {
   });
 
   describe('adding a profile', () => {
-    it('should test that true === true', () => {
+    it('should test that true === true', (done) => {
       expect(true).toBe(true);
+      done();
     });
     // it should add a profile to the database when given a new user
     // add a new profile
@@ -173,8 +180,9 @@ describe('profileController', () => {
 
 // Sample test
 describe('Sample Test', () => {
-  it('should test that true === true', () => {
+  it('should test that true === true', (done) => {
     expect(true).toBe(true);
+    done();
   });
 });
 

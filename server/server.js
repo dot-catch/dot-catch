@@ -1,12 +1,12 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const profileController = require('../controllers/profileController.js');
-const authController = require('../controllers/authController.js');
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const profileController = require("../controllers/profileController.js");
+const authController = require("../controllers/authController.js");
 // OAuth client and secret credentials
-const clientID = '427c8387215135ef63b7';
-const clientSecret = '7b79f3ecbbf15addbad9005104242aa42c9ac5e4';
+const clientID = "427c8387215135ef63b7";
+const clientSecret = "7b79f3ecbbf15addbad9005104242aa42c9ac5e4";
 
 const app = express();
 // const port = 3000;
@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 // This pushes up the two javascript files used by webpack for the login html and the index.html
-app.use('/dist', express.static(path.resolve(__dirname, 'dist/')));
+app.use("/dist", express.static(path.resolve(__dirname, "../dist")));
 
 /*
 // Flow Test
@@ -31,20 +31,20 @@ app.use('/dist', express.static(path.resolve(__dirname, 'dist/')));
 */
 
 // For supertest file
-app.get('/supertest', (req, res) => {
-  res.status(201).send({ msg: 'hello test' });
+app.get("/supertest", (req, res) => {
+  res.status(201).send({ msg: "hello test" });
 });
 
 // render index.html on initial load
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../public/index.html'));
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../public/index.html"));
 });
 
 // Need route handler to serve up feedPage
-app.get('/loginPage', (req, res) => {
-  console.log('from /loginPage');
+app.get("/loginPage", (req, res) => {
+  console.log("from /loginPage");
   // serves up the Login Page
-  res.sendFile(path.resolve(__dirname, '../public/loginpage.html'));
+  res.sendFile(path.resolve(__dirname, "../public/loginpage.html"));
 });
 
 app.get(
@@ -56,7 +56,7 @@ app.get(
   (req, res) => {
     const { allProfiles, userGithubProfile } = res.locals;
     res.status(200).send({ allProfiles, userGithubProfile });
-  },
+  }
 );
 
 // handles redirect from GitHub
@@ -67,7 +67,7 @@ app.get(
   (req, res) => {
     return res
       .cookie("authToken", res.locals.session_id, { maxAge: 5000 })
-      .redirect("http://localhost:8080/");
+      .redirect("http://localhost:3000/");
   }
 );
 

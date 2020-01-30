@@ -121,50 +121,48 @@ describe('authController', () => {
 });
 
 describe('profileController', () => {
-  // beforeAll
-  beforeAll((done) => {
-    console.log('beforeAll ran');
-    // Add a profile
-    const createTestUserSQL = `
-      INSERT INTO _profiles_testing (
-        login,
-        user_id,
-        avatar_url,
-        followers,
-        name,
-        public_repos,
-        repos_url
-      ) VALUES (
-        'testuser',
-        123,
-        'fakeimage.png',
-        50,
-        'Test User',
-        10,
-        'reposURL'
-      )
-    `;
-    db
-      .query(createTestUserSQL, [])
-      .then(() => done())
-      .catch((err) => console.log(err));
-  });
-
-  // afterAll
-  afterAll((done) => {
-    console.log('afterAll RAN');
-    // Delete the profile added in beforeAll
-    const deleteTestUserSQL = `
-      DELETE FROM _profiles_testing
-      WHERE login='testuser'
-    `;
-    db
-      .query(deleteTestUserSQL, [])
-      .then(() => done())
-      .catch((err) => console.log(err));
-  });
-
+  
   describe('adding a profile', () => {
+    // beforeAll
+    beforeAll((done) => {
+      console.log('beforeAll ran');
+      // Add a profile
+      const createTestUserSQL = `
+        INSERT INTO _profiles_testing (
+          login,
+          user_id,
+          avatar_url,
+          followers,
+          name,
+          public_repos,
+          repos_url
+        ) VALUES (
+          'testuser',
+          123,
+          'fakeimage.png',
+          50,
+          'Test User',
+          10,
+          'reposURL'
+        )
+      `;
+      db.query(createTestUserSQL, [], (err, res) => {
+        done();
+      });
+    });
+  
+    // afterAll
+    afterAll((done) => {
+      console.log('afterAll RAN');
+      // Delete the profile added in beforeAll
+      const deleteTestUserSQL = `
+        DELETE FROM _profiles_testing
+        WHERE login='testuser'
+      `;
+      db.query(deleteTestUserSQL, [], (err, res) => {
+        done();
+      });
+    });
     it('should test that true === true', (done) => {
       expect(true).toBe(true);
       done();
@@ -173,6 +171,16 @@ describe('profileController', () => {
     // add a new profile
 
     // it should not add a profile to the database when given an existing user
+    it('should confirm that testuser already exists', (done) => {
+      const checkUserSQL = `
+        SELECT * FROM _profiles_testing
+        WHERE login='testuser'
+      `;
+      done();
+      // db.query(checkUserSQL, [], (err, res) => {
+      //   // expect(res.rows.length).
+      // })
+    });
     // add the same profile in the beforeAll
   });
 
@@ -188,26 +196,3 @@ describe('Sample Test', () => {
     done();
   });
 });
-
-
-// const createTestUserSQL = `
-//   INSERT INTO _profiles_testing (
-//     login,
-//     user_id,
-//     avatar_url,
-//     followers,
-//     name,
-//     public_repos,
-//     repos_url
-//   ) VALUES (
-//     'testuser',
-//     123,
-//     'fakeimage.png',
-//     50,
-//     'Abaas Khorrami',
-//     10,
-//     'reposURL'
-//   )
-// `;
-
-// db.query(createTestUserSQL, [], (err, res) => console.log(res.rows));

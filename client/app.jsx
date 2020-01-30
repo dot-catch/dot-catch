@@ -1,132 +1,86 @@
 /* eslint-disable */ 
-import React, { Component} from "react";
-import "./style.css";
-import {hot} from "react-hot-loader";
+import React, { useState, useEffect } from "react";
+//test
+//import {hot} from "react-hot-loader";
 import FeedProfile from "./feed.jsx";
 
-class App extends Component {
-  constructor(props, context) {
-    super(props);
-    this.state = {
-      login: '',
-      user_id: '',
-      avatar_url: '',
-      followers: 0,
-      name: '',
-      public_repos: 0,
-      repos_url: '',
-      feed: [],
-    }
-  }
+function App () {
+    const [login, setLogin] = useState('');
+    const [user_id, setUser_id] = useState('');
+    const [avatar_url, setAvatar_url] = useState('');
+    const [followers, setFollowers] = useState(0);
+    const [name, setName] = useState('');
+    const [public_repos, setPublic_repos] = useState(0);
+    const [repos_url, setRepos_url] = useState('');
+    const [feed, setFeed] = useState('');
 
-  componentDidMount() {
-    // both constants used to grab GitHub access token from search window in browser
-    const query = window.location.search.substring(1)
-    const token = query.split('access_token=')[1]
-
-    // using parsed access_token to fetch user data
-    fetch('https://api.github.com/user', {
-      headers: {
-        Authorization: 'token ' + token,
-      }
-    })
+    useEffect(() => {
+        fetch('/info')
       .then(res => res.json())
-      // adds the currently logged in user to state
-      .then(res => {
-        const { login, avatar_url, followers, name, public_repos, repos_url, } = res;
-
-        this.setState({
-          login,
-          user_id: res.id,
-          avatar_url,
-          followers,
-          name,
-          public_repos,
-          repos_url,
-        })
-      })
-      // sends user info to server
-      .then(() => {
-        const userData = {
-          login: this.state.login,
-          avatar_url: this.state.avatar_url,
-          followers: this.state.followers,
-          name: this.state.name,
-          public_repos: this.state.public_repos,
-          repos_url: this.state.repos_url, 
-          user_id: this.state.user_id
+      .then(data => {
+        console.log('data!', data);
+        if (data.msg === 'invalid session') {
+          window.location.pathname = '/loginPage'
         }
-        fetch('/api/addUser', {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json" 
-          },
-          body: JSON.stringify(userData),
-        })
+        const { login, avatar_url, followers, name, public_repos, repos_url, } = data.userGithubProfile;
+        setLogin(login);
+        setAvatar_url(avatar_url);
+        setFollowers(followers);
+        setName(name);
+        setPublic_repos(public_repos);
+        setRepos_url(repos_url)
+    }).catch((err) => {
+        console.log(err);
+      }), []});
+
+      function getAll () {
+        fetch('/info')
           .then(res => res.json())
           .then(data => {
-            console.log('created new user: ', data)
+          setFeed(data.allProfiles)
           })
-          .catch(err => console.log('addUser POST error: ', err))
-      })
-      // gets all profiles but the current user, and adds them to state
-      .then(() => {
-        const currentUser = {
-          login: this.state.login,
-          name: this.state.name,
-          user_id: this.state.user_id,
-        }
-        fetch('/api/getAll', {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json" 
-          },
-          body: JSON.stringify(currentUser),
-        })
-          .then(res => res.json())
-          .then(data => {
-            return this.setState({
-              feed: data,
-            })
+          .catch((err) => {
+            console.log(err);
           })
-          .catch(err => console.log('addUser POST error: ', err))
-      })
-  }
+          
+      };
 
-  render(){
-    // loops through profiles and adds them as components to an array
-    const feedArr = [];
-    for (let i = 0; i < this.state.feed.length; i+=1) {
-      feedArr.push(<FeedProfile userInfo={this.state.feed[i]} key={`userProfile-${i}`} />)
+      const feedArr = [];
+    for (let i = 0; i < feed.length; i+=1) {
+      feedArr.push(<FeedProfile userInfo={feed[i]} key={`userProfile-${i}`} />)
     }
-
     return(
-      <div>
-        <div id="header">
-          <h1>.catch</h1>
-          <p>Promises not resolved? Let us fix that.</p>
-        </div>
-        <div id="main">
-        <div id="yourProfile">
-          <div id="profilePhoto">
-            <img src={`${this.state.avatar_url}`} ></img>
-          </div><h3>Your Profile</h3>
+        <div>
+          <div id="header">
+            <h1>.catch</h1>
+            <p>Promises not resolved? Let us fix that.</p>
+          </div>
+          {/* div for current user's profile picture */}
+          <div id="profileDiv">
+          <img src={`${avatar_url}`}  id="pic"></img>
+          </div>
+  
+          {/* div for current user's information */}
           <div id="profileInfo">
-            
-            <p>Name: {this.state.name}</p>
-            <p>GitHub Handle: {this.state.login}</p>
-            <p>Followers: {this.state.followers}</p>
+              <div>
+              <p>{name}</p>
+              <p>GitHub Handle: {login}</p>
+              <p>Followers: {followers}</p>
+              
+              {/* div for the buttons */}
+              </div>
+              <div id='buttonDiv'>
+              <button onClick={getAll}>Get All</button>
+              <button>Filter</button>
+              </div>
           </div>
+              <hr></hr>
+            <div id="feed">
+              {feedArr}
+            </div>
         </div>
-          <h3>Hot Modules In Your Area</h3>
-          <div id="feed">
-            {feedArr}
-          </div>
-        </div>
-      </div>
     )
-  }
+
 }
 
-
-export default hot(module)(App);
+export default App;

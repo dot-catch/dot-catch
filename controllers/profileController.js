@@ -34,9 +34,10 @@ const profileController = {};
       const values = [];
       for (let i = 0; i < fields.length; i += 1) {
         // These checks not really necessary at this time, since data is coming from github, not user input.  If user input allowed, will probably be needed.
-        if (res.locals.userGithubProfile[fields[i]] !== undefined) {
+        const val = res.locals.userGithubProfile[fields[i]];
+        if (val !== undefined || val !== null) {
           // Iterates through all DB fields (hardcoded into array), checks if present in res.locals.userGithubProfile
-          values.push(res.locals.userGithubProfile[fields[i]]);
+          values.push(val);
         } else values.push("");
       }
       // using separate variables for inputs to avoid risk of SQL injection attacks

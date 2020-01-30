@@ -1,8 +1,8 @@
 const db = require("../models/model.js");
 const axios = require("axios");
 const authController = {};
-const clientID = "427c8387215135ef63b7";
-const clientSecret = "7b79f3ecbbf15addbad9005104242aa42c9ac5e4";
+const clientID = "6c6c4f2975f185760b3e";
+const clientSecret = "d5a6f4ca0eed15eeeb71f22d794d29d26aed7398";
 const fetch = require("node-fetch");
 
 authController.getToken = function(req, res, next) {

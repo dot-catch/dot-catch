@@ -38,7 +38,7 @@ const profileController = {};
         if (val !== undefined || val !== null) {
           // Iterates through all DB fields (hardcoded into array), checks if present in res.locals.userGithubProfile
           values.push(val);
-        } else values.push("");
+        } else values.push("N/A");
       }
       // using separate variables for inputs to avoid risk of SQL injection attacks
       const text =

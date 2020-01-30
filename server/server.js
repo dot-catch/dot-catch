@@ -5,8 +5,8 @@ const cookieParser = require("cookie-parser");
 const profileController = require("../controllers/profileController.js");
 const authController = require("../controllers/authController.js");
 // OAuth client and secret credentials
-const clientID = "427c8387215135ef63b7";
-const clientSecret = "7b79f3ecbbf15addbad9005104242aa42c9ac5e4";
+const clientID = "6c6c4f2975f185760b3e";
+const clientSecret = "d5a6f4ca0eed15eeeb71f22d794d29d26aed7398";
 
 const app = express();
 // const port = 3000;
@@ -66,8 +66,8 @@ app.get(
   authController.addToken,
   (req, res) => {
     return res
-      .cookie("authToken", res.locals.session_id, { maxAge: 5000 })
-      .redirect("http://localhost:3000/");
+      .cookie("authToken", res.locals.session_id, { maxAge: 500000 })
+      .redirect("http://192.168.10.138:3000/");
   }
 );
 

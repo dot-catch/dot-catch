@@ -45,8 +45,15 @@ const babelPolyfill = require('babel-polyfill');
 
 // app must not be listening in server.js file so tests can run
 const app = require('../server/server');
-const db = require('../models/model');
 
+const { Pool } = require("pg");
+const PG_URI = "postgres://ycchvajh:YEQQEbpeqAzBfwrZ-vTy2lKQqTEu6ZDV@rajje.db.elephantsql.com:5432/ycchvajh";
+const pool = new Pool({
+  connectionString: PG_URI
+});
+console.log(pool);
+
+const db = require('../models/model');
 const request = supertest(app);
 
 const clientID = '427c8387215135ef63b7';
@@ -58,9 +65,9 @@ let authToken; // should authToken be stored here? or in a beforeAll and cleared
 //
 // });
 
-// afterAll(async () => {
-//
-// });
+afterAll(() => {
+  pool.end();
+});
 
 describe('Route integration', () => {
   describe('/', () => {
@@ -146,7 +153,7 @@ describe('profileController', () => {
           'reposURL'
         )
       `;
-      db.query(createTestUserSQL, [], (err, res) => {
+      pool.query(createTestUserSQL, [], (err, res) => {
         done();
       });
     });
@@ -159,7 +166,7 @@ describe('profileController', () => {
         DELETE FROM _profiles_testing
         WHERE login='testuser'
       `;
-      db.query(deleteTestUserSQL, [], (err, res) => {
+      pool.query(deleteTestUserSQL, [], (err, res) => {
         done();
       });
     });

@@ -102,6 +102,7 @@ describe('Route integration', () => {
   });
 });
 
+// This section is not complete
 describe('authController', () => {
   describe('setToken', () => {
     it('should store an access token if given a valid request token', (done) => {
@@ -131,7 +132,6 @@ describe('authController', () => {
 describe('SQL Script Testing', () => {
   
   describe('adding a profile', () => {
-    // beforeAll
     beforeAll((done) => {
       console.log('beforeAll ran');
       // Add a profile
@@ -159,7 +159,6 @@ describe('SQL Script Testing', () => {
       });
     });
   
-    // afterAll
     afterAll((done) => {
       console.log('afterAll RAN');
       // Delete the profile added in beforeAll
@@ -169,7 +168,6 @@ describe('SQL Script Testing', () => {
       });
     });
 
-    // it should add a profile to the database when given a new user
     it('should add a user to the database if they do not exist', (done) => {
       const newUserSQL = `
       INSERT INTO _profiles_testing (
@@ -202,7 +200,6 @@ describe('SQL Script Testing', () => {
       });
     });
 
-    // it should not add a profile to the database when given an existing user
     it('should confirm that a user already exists', (done) => {
       const checkUserSQL = `
         SELECT * FROM _profiles_testing

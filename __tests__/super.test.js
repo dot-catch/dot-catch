@@ -42,32 +42,35 @@ Database Create Table Scripts:
 // See https://jestjs.io/docs/en/asynchronous
 
 const supertest = require('supertest');
+
+// Jest uses this under the hood
 const babelPolyfill = require('babel-polyfill');
 
-// app must not be listening in server.js file so tests can run
+// App must not be listening in server.js file so that tests can run
 const app = require('../server/server');
 
+// Create a new pool for this file so we can close it in afterAll()
 const { Pool } = require("pg");
 const PG_URI = "postgres://ycchvajh:YEQQEbpeqAzBfwrZ-vTy2lKQqTEu6ZDV@rajje.db.elephantsql.com:5432/ycchvajh";
 const pool = new Pool({
   connectionString: PG_URI
 });
-console.log(pool);
 
-const db = require('../models/model');
 const request = supertest(app);
 
+// To eventually be used for OAuth testing
 const clientID = '427c8387215135ef63b7';
 const clientSecret = '7b79f3ecbbf15addbad9005104242aa42c9ac5e4';
-let authToken; // should authToken be stored here? or in a beforeAll and cleared on afterAll?
+let authToken;
 
 
-// beforeAll((done) => {
-//
-// });
+beforeAll((done) => {
+  done();
+});
 
-afterAll(() => {
+afterAll((done) => {
   pool.end();
+  done();
 });
 
 describe('Route integration', () => {
@@ -125,7 +128,7 @@ describe('authController', () => {
   });
 });
 
-describe('SQL Script Testing:', () => {
+describe('SQL Script Testing', () => {
   
   describe('adding a profile', () => {
     // beforeAll

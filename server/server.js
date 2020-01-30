@@ -43,6 +43,7 @@ app.get("/loginPage", (req, res) => {
 
 app.get(
   "/info",
+  authController.queryToken,
   authController.checkCookie,
   profileController.addProfile,
   profileController.getAllProfiles,
@@ -53,11 +54,16 @@ app.get(
 );
 
 // handles redirect from GitHub
-app.get("/feed", authController.setToken, (req, res) => {
-  return res
-    .cookie("authToken", res.locals.token, { maxAge: 5000 })
-    .redirect("http://localhost:8080/");
-});
+app.get(
+  "/feed",
+  authController.getToken,
+  authController.addToken,
+  (req, res) => {
+    return res
+      .cookie("authToken", res.locals.session_id, { maxAge: 5000 })
+      .redirect("http://localhost:8080/");
+  }
+);
 
 app.use(function(err, req, res, next) {
   //Basic error handler, doesn't really properly handle errors from middleware at this time. TODO.

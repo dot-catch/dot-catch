@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
 Back-end testing file
 
@@ -78,7 +79,6 @@ describe('Route integration', () => {
         expect(response.status).toBe(201);
         expect(response.body.msg).toBe('hello test');
         expect(response.header['content-type']).toBe('application/json; charset=utf-8');
-        // .expect(response).toBe('content-type', /application\/json/);
         done();
       });
 
@@ -86,7 +86,6 @@ describe('Route integration', () => {
         const response = await request.get('/');
         expect(response.status).toBe(200);
         expect(response.header['content-type']).toBe('text/html; charset=UTF-8');
-        // .expect('Content-Type', /text\/html/)
         done();
       });
 
@@ -94,7 +93,6 @@ describe('Route integration', () => {
         const response = await request.get('/loginPage');
         expect(response.status).toBe(200);
         expect(response.header['content-type']).toBe('text/html; charset=UTF-8');
-        // .expect('Content-Type', /text\/html/)
         done();
       });
     });

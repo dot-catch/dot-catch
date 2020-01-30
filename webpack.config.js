@@ -2,7 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: './client/index.js',
+  entry: {
+    a: './client/index.js',
+    b: './client/loginpage.js',
+  },
   mode: 'development',
   module: {
     rules: [
@@ -22,7 +25,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist/'),
     publicPath: '/dist/',
-    filename: 'bundle.js',
+    filename: '[name].entry.js',
   },
   devServer: {
     // contentBase: path.join(__dirname, 'public/index.html'),
@@ -34,4 +37,5 @@ module.exports = {
     hotOnly: true,
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
+  
 };

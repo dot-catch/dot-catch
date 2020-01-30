@@ -5,11 +5,12 @@ import App from './app.jsx';
 
 // console.log(window.location.href)
 // console.log(document.cookie);
+// // if (window.location.href === 'http://localhost:8080/') {
 // const isLoggedIn = document.cookie.includes('isLoggedIn=true');
-// if (window.location.href === 'http://localhost:8080/') {
+// if (!isLoggedIn) {
 //     ReactDOM.render(<Login />, document.getElementById('root'));
 // } else {
 //   ReactDOM.render(<App />, document.getElementById('root'));
 // };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Login />, document.getElementById('root'));

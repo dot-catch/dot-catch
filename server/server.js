@@ -67,7 +67,7 @@ app.get(
   (req, res) => {
     return res
       .cookie("authToken", res.locals.session_id, { maxAge: 500000 })
-      .redirect("http://3.83.113.15:3000/");
+      .redirect("http://3.83.113.15/");
   }
 );
 

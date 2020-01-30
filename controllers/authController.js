@@ -6,7 +6,7 @@ const clientSecret = "d5a6f4ca0eed15eeeb71f22d794d29d26aed7398";
 const fetch = require("node-fetch");
 
 authController.getToken = function(req, res, next) {
-  console.log("Greetings from your auth controller");
+  //console.log("Greetings from your auth controller");
   const requestToken = req.query.code;
   // Create a post request to send clientID, secret and request token to GitHub
   axios({
@@ -35,8 +35,8 @@ authController.checkCookie = function(req, res, next) {
     .then(response => response.json())
     .then(data => {
       // console.log('DATA:', data);
-      console.log("access token: ", res.locals.authToken);
-      console.log("initial fetch in /info");
+      //console.log("access token: ", res.locals.authToken);
+      //console.log("initial fetch in /info");
       res.locals.userGithubProfile = data;
       next();
     });
@@ -76,6 +76,7 @@ authController.addToken = function(req, res, next) {
   });
 };
 authController.queryToken = function(req, res, next) {
+  console.log("THIS IS YO COOKIES:   ", req.cookies);
   if (req.cookies.authToken !== undefined) {
     const searchQuery = {
       name: "Find Oauth token",

@@ -14,14 +14,14 @@ const profileController = {};
   };
   db.query(checkQuery, (err, profile) => {
     // if query returns anything, that means that a profile for the user already exists
-    console.log("querying the database");
+    //console.log("querying the database");
     if (profile.rows.length > 0) {
       // If any profiles return, rows array has objects in it.  Thus length greater than one, there's a profile.
-      console.log("profile already exists");
+      //console.log("profile already exists");
       // res.send({ msg: 'Profile already exists' }); // THIS SHORTCIRCUITS MIDDLEWARE CHAIN
       return next();
     } else {
-      console.log("profile does not exist");
+      //console.log("profile does not exist");
       const fields = [
         "login",
         "id",
@@ -35,7 +35,7 @@ const profileController = {};
       for (let i = 0; i < fields.length; i += 1) {
         // These checks not really necessary at this time, since data is coming from github, not user input.  If user input allowed, will probably be needed.
         const val = res.locals.userGithubProfile[fields[i]];
-        if (val !== undefined || val !== null) {
+        if (val !== undefined && val !== null) {
           // Iterates through all DB fields (hardcoded into array), checks if present in res.locals.userGithubProfile
           values.push(val);
         } else values.push("N/A");

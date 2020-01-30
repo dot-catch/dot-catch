@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
 
 // Need route handler to serve up feedPage
 app.get("/loginPage", (req, res) => {
-  console.log("from /loginPage");
+  //console.log("from /loginPage");
   // serves up the Login Page
   res.sendFile(path.resolve(__dirname, "../public/loginpage.html"));
 });
@@ -67,13 +67,13 @@ app.get(
   (req, res) => {
     return res
       .cookie("authToken", res.locals.session_id, { maxAge: 500000 })
-      .redirect("http://192.168.10.138:3000/");
+      .redirect("http://3.83.113.15:3000/");
   }
 );
 
 app.use((err, req, res, next) => {
   // Basic error handler, doesn't really properly handle errors from middleware at this time. TODO.
-  console.error(err.stack);
+  //console.error(err.stack);
   res.status(404).send(err);
 });
 

@@ -61,9 +61,9 @@ describe('Route integration', () => {
 
       // --------- TEST ROUTE
       it('responds with 200 status and text/html content type', async (done) => {
-        // return request.get('/supertest')
-        //   .expect('Content-Type', /application\/json/)
-        //   .expect(200);
+        return request.get('/supertest')
+          .expect('Content-Type', /application\/json/)
+          .expect(200);
 
 
         // const response = await request.get('/supertest');

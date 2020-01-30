@@ -36,7 +36,7 @@
   },
   "scripts": {
     "build": "webpack",
-    "dev": "webpack-dev-server & nodemon server/server.js",
+    "dev": "webpack-dev-server & nodemon server/start.js",
     "test": "jest --verbose"
   },
   "jest": {

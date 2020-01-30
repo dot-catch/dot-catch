@@ -66,28 +66,29 @@ describe('Route integration', () => {
   describe('/', () => {
     describe('GET', () => {
       // --------- TEST ROUTE
-      it('responds with 200 status and text/html content type', async (done) => {
+      it('responds with 201 status and application/json content type', async (done) => {
         const response = await request.get('/supertest');
         expect(response.status).toBe(201);
         expect(response.body.msg).toBe('hello test');
-        // expect(response).toBe('Content-Type', /application\/json/);
+        expect(response.header['content-type']).toBe('application/json; charset=utf-8');
+        // .expect(response).toBe('content-type', /application\/json/);
         done();
       });
 
-      it('responds with 200 status and text/html content type when requesting the main feed', (done) => {
+      it('responds with 200 status and text/html content type when requesting the main feed', async (done) => {
+        const response = await request.get('/');
+        expect(response.status).toBe(200);
+        expect(response.header['content-type']).toBe('text/html; charset=UTF-8');
+        // .expect('Content-Type', /text\/html/)
         done();
-        // return request
-        //   .get('/')
-        //   .expect('Content-Type', /text\/html/)
-        //   .expect(200);
       });
 
-      it('responds with 200 status and text/html content type when requesting the login page', (done) => {
+      it('responds with 200 status and text/html content type when requesting the login page', async (done) => {
+        const response = await request.get('/loginPage');
+        expect(response.status).toBe(200);
+        expect(response.header['content-type']).toBe('text/html; charset=UTF-8');
+        // .expect('Content-Type', /text\/html/)
         done();
-        // return request
-        //   .get('/loginPage')
-        //   .expect('Content-Type', /text\/html/)
-        //   .expect(200);
       });
     });
   });
@@ -114,14 +115,14 @@ describe('authController', () => {
 
     it('should respond with an error if given an invalid access token', (done) => {
       expect(true).toBe(true);
-      done()
+      done();
     });
   });
 });
 
 describe('profileController', () => {
   // beforeAll
-  beforeAll(() => {
+  beforeAll((done) => {
     console.log('beforeAll ran');
     // Add a profile
     const createTestUserSQL = `
@@ -138,27 +139,29 @@ describe('profileController', () => {
         123,
         'fakeimage.png',
         50,
-        'Abaas Khorrami',
+        'Test User',
         10,
         'reposURL'
       )
     `;
-    // db
-    //   .query(createTestUserSQL, [])
-    //   .catch((err) => console.log(err));
+    db
+      .query(createTestUserSQL, [])
+      .then(() => done())
+      .catch((err) => console.log(err));
   });
 
   // afterAll
-  afterAll(() => {
+  afterAll((done) => {
     console.log('afterAll RAN');
     // Delete the profile added in beforeAll
     const deleteTestUserSQL = `
       DELETE FROM _profiles_testing
       WHERE login='testuser'
     `;
-    // db
-    //   .query(deleteTestUserSQL, [])
-    //   .catch((err) => console.log(err));
+    db
+      .query(deleteTestUserSQL, [])
+      .then(() => done())
+      .catch((err) => console.log(err));
   });
 
   describe('adding a profile', () => {

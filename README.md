@@ -1,6 +1,4 @@
 # dot-catch
-Your promises are unresolved.  Let's fix that.
-
 
 <p> Platform to find developers for your next open source project </p>
 
@@ -10,3 +8,6 @@ Your promises are unresolved.  Let's fix that.
 -	PostgreSQL
 -	Github OAuth
 - AWS (EC2)
+
+#
+# Your promises are unresolved.  Let's fix that.

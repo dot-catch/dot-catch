@@ -3,9 +3,9 @@
 <p> Platform to find developers for your next open source project </p>
 
 # Preview
-<div align="center" display: flex; justify-content:space-around;>
-  <img src="/assets/dotCatch Login.png" style="max-width: 20%; max-height: 20%/>
-  <img src="/assets/dotCatch User.png" style="max-width: 20%; max-height: 20%/>
+<div display: flex; justify-content:space-around;>
+  <img src="/assets/dotCatch Login.png" />
+  <img src="/assets/dotCatch User.png" />
 </div>
 
 # Stack 

@@ -4,8 +4,8 @@
 
 # Preview
 <div align="center" display: flex; justify-content:space-around;>
-  <img src="/assets/dotCatch Login.png"/>
-  <img src="/assets/dotCatch User.png"/>
+  <img src="/assets/dotCatch Login.png" style="max-width: 20%; max-height: 20%/>
+  <img src="/assets/dotCatch User.png" style="max-width: 20%; max-height: 20%/>
 </div>
 
 # Stack 
